@@ -1,0 +1,30 @@
+Data quality report 2010_JanJun
+251981 rows
+
+Missing data 
+                      KY_CD  PD_CD                                      X_COOR     
+[0,0,1,73015,72946,0,0,0,1041,232,232,0,0,0,0,0,57637,1122,251981,238856,9296,9296,9296,9296,9296]
+
+25 cases with TO_DT but no TO_TI
+94 cases with TO_TI but no TO_DT
+
+
+Analyses PD_desc of 1041 missing OFNS_desc
+All cases have at least 1 of PD_DESC or OFNS_DESC
+All cases missing PD_CD are missing PD_DESC
+X_COOR, Y_COOR, Lat and Long are always present together or all are missing
+
+For those with HADEVELOPT, dates are often not specified exactly(cluster on 1st of month or year)
+
+
+Lowest Crime Days:  02/10/2010(843), 2/26/2010(933)
+Highest Crime Days: 01/01/2010(2343),01/15/2010(1785)	Other peaks, 1st Apr(1713) and 1st June (1779)
+Median For Crime Days: 1400-1500 per day
+
+Most common crimes- Petit Larceny(38681), Harrasment2(28696), Assault3&Rel(26470)
+
+
+Rapes are Reported in future years 15% of time, sex crimes 5%, grand larceny 4%, and petit larceny 1.3%
+
+
+

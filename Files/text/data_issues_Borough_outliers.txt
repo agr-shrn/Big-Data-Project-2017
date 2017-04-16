@@ -1,0 +1,27 @@
+Borough outliers
+
+
+#BRONX
+# total, ADDR_PCT_CD
+1, 
+2, 114			# one is tech. correct Rikers island((40.791043284, -73.882848101)), one is queens
+3, 23
+1, 25
+1, 6
+1, 71
+
+
+#MANHATTAN
+1, 104
+
+#BROOKLYN
+1,104			# Should be queens
+1,106			# Should be queens
+1,121
+1,13
+1,14
+1,26
+1, 7
+1, 9
+
+#QUEENS & STATEN - no error

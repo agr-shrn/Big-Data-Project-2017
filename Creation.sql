@@ -1,0 +1,41 @@
+#create database NYPD;
+use NYPD;
+
+DROP table MyData;
+
+CREATE TABLE MyData(
+  CMPLNT_NUM varchar(100) DEFAULT NULL,
+  CMPLNT_FR_DT varchar(100) DEFAULT NULL,
+  CMPLNT_FR_TM varchar(100) DEFAULT NULL,
+  CMPLNT_TO_DT varchar(100) DEFAULT NULL,
+  CMPLNT_TO_TM varchar(100) DEFAULT NULL,
+  RPT_DT varchar(100) DEFAULT NULL,
+  KY_CD varchar(100) DEFAULT NULL,
+  OFNS_DESC varchar(100) DEFAULT NULL,
+  PD_CD varchar(100) DEFAULT NULL,
+  PD_DESC varchar(100) DEFAULT NULL,
+  CRM_ATPT_CPTD_CD varchar(100) DEFAULT NULL,
+  LAW_CAT_CD varchar(100) DEFAULT NULL,
+  JURIS_DESC varchar(100) DEFAULT NULL,
+  BORO_NM varchar(100) DEFAULT NULL,
+  ADDR_PCT_CD varchar(100) DEFAULT NULL,
+  LOC_OF_OCCUR_DESC varchar(100) DEFAULT NULL,
+  PREM_TYP_DESC varchar(100) DEFAULT NULL,
+  PARKS_NM varchar(100) DEFAULT NULL,
+  HADEVELOPT varchar(100) DEFAULT NULL,
+  X_COORD_CD varchar(100) DEFAULT NULL,
+  Y_COORD_CD varchar(100) DEFAULT NULL,
+  Latitude varchar(100) DEFAULT NULL,
+  Longitude varchar(100) DEFAULT NULL,
+  Lat_Lon varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+delete from MyData where KY_CD = 'KY_CD';
+
+
+
+LOAD DATA LOCAL INFILE '/Users/vipinarora/Desktop/GradSem2/Big\ Data/Project/NYPD_Complaint_Data_Complete.csv' 
+INTO TABLE MyData 
+FIELDS TERMINATED BY ',' 
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n';

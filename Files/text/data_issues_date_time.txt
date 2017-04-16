@@ -1,0 +1,6 @@
+ALL 				4166
+INDIVIDUAL 
+2, 31, 4135, 
+R<F, F<T, T<R
+
+Only 1 proper issue with time, CMPLNT_NUM 267218909, where time is till 00:00 on same day instead of next day
