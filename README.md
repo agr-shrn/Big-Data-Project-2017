@@ -13,6 +13,7 @@ wget https://data.cityofnewyork.us/api/views/qgea-i56i/rows.csv?accessType=DOWNL
 mv downloaded_filename.csv NYPD.csv
 
 hadoop fs -copyFromLocal NYPD.csv
+
 --
 
 #if metastore_db folder exists
@@ -41,4 +42,4 @@ df.write.csv('Borough_wise_Count.csv')
 
 Type ctrl+d(exit pyspark)
 
-hadoop fs -getmerge small.csv small.csv 
+hadoop fs -getmerge Borough_wise_Count.csv Borough_wise_Count.csv 
