@@ -1,0 +1,350 @@
+library(ggplot2)
+library(scales)
+library(XML)
+library(stats)
+library(tseries)
+library(forecast)
+library(ggplot2)
+library(class)
+library(lattice)
+
+#Reading Data
+
+csv.data <- read.csv("C:/Durvesh/Sem 2/BDAMS/Premise_Description_Wise_Year_Wise_Count.csv")
+
+street_data = csv.data[csv.data$PREM_TYP_DESC == 'STREET', ]
+street_data=street_data[2:3]
+
+residence_data = csv.data[csv.data$PREM_TYP_DESC == 'RESIDENCE - APT. HOUSE', ]
+residence_data=residence_data[2:3]
+
+
+plot(street_data$year,street_data$count, type="l")
+lines (residence_data$year,residence_data$count)
+
+ggplot(street_data, aes(street_data$year)) +
+  geom_line(aes(y=street_data$count), colour="red") +  
+  geom_line(aes(y=residence_data$count), colour="green")  
+
+----------------------------
+----------------------------
+  
+  
+#select BORO_NM,YEAR(STR_TO_DATE(RPT_DT, '%m/%d/%Y')) RPT_DT ,count(1) count from nypd_complaints
+#where BORO_NM<>''
+#group by BORO_NM,YEAR(STR_TO_DATE(RPT_DT, '%m/%d/%Y'))
+
+borough_wise_year_wise_data <- read.csv("C:/Durvesh/Sem 2/BDAMS/Borough_wise_Year_Wise.csv")
+
+brooklyn_data=borough_wise_year_wise_data[borough_wise_year_wise_data$BORO_NM=='BROOKLYN',]
+queens_data=borough_wise_year_wise_data[borough_wise_year_wise_data$BORO_NM=='QUEENS',]
+bronx_data=borough_wise_year_wise_data[borough_wise_year_wise_data$BORO_NM=='BRONX',]
+manhattan_data=borough_wise_year_wise_data[borough_wise_year_wise_data$BORO_NM=='MANHATTAN',]
+staten_island_data=borough_wise_year_wise_data[borough_wise_year_wise_data$BORO_NM=='STATEN ISLAND',]
+
+
+ggplot(brooklyn_data, aes(x=brooklyn_data$RPT_DT)) +
+  geom_line(aes(y=bronx_data$count ,colour="Bronx")) +
+  geom_line(aes(y=brooklyn_data$count ,colour="Brooklyn")) +
+  geom_line(aes(y=manhattan_data$count ,colour="Manhattan")) +
+  geom_line(aes(y=queens_data$count ,colour="Queens")) +
+  geom_line(aes(y=staten_island_data$count ,colour="Staten_Island"))+
+  scale_colour_manual("", 
+    breaks = c("Brooklyn", "Queens", "Bronx","Manhattan","Staten_Island"),
+    values = c("Brooklyn"="green", "Queens"="red", "Bronx"="blue", "Manhattan"="yellow", "Staten_Island"="black")
+    ) +
+  xlab("Year")+
+  ylab("Incidences Count")+
+  scale_x_continuous(breaks=seq(2006,2015,by=2) , limits=c(2006,2015)) 
+
+---------------------------------
+---------------------------------
+---------------------------------
+---------------------------------
+#select BORO_NM,count(1) count from nypd_complaints
+#where BORO_NM<>''
+#group by BORO_NM
+  
+borough_wise_data <- read.csv("C:/Durvesh/Sem 2/BDAMS/Borough_wise_Count.csv")
+
+total= sum(borough_wise_data$count)
+
+pie_chart <- ggplot(borough_wise_data, aes(x="", y=count, fill=BORO_NM))+
+  geom_bar(width = 1, stat = "identity")+
+  coord_polar("y", start=0)
+
+ 
+pie_chart +
+  theme(axis.text.x=element_blank()) +
+  geom_text(aes(y = count/6 + c(0, cumsum(count)[-length(count)]), 
+                label = percent(count/total)), size=2)
+
+
+---------------------------------
+---------------------------------
+---------------------------------
+  ---------------------------------
+  
+#select STR_TO_DATE(CMPLNT_FR_DT, '%m/%d/%Y') complaint_date, count(1) count from NYPD_COMPLAINTS
+#where YEAR(STR_TO_DATE(CMPLNT_FR_DT, '%m/%d/%Y'))>2005
+#group by STR_TO_DATE(CMPLNT_FR_DT, '%m/%d/%Y')
+#order by STR_TO_DATE(CMPLNT_FR_DT, '%m/%d/%Y')
+  
+date_wise_data <- read.csv("C:/Durvesh/Sem 2/BDAMS/DateWise.csv")
+
+plot(date_wise_data$complaint_date,date_wise_data$count, type="l")
+
+
+#First Day of the month has the most incidences. 
+#Data Quality Issue or trend???
+
+----------------------------
+----------------------------
+---------------------------
+  
+#  select concat(YEAR(STR_TO_DATE(CMPLNT_FR_DT, '%m/%d/%Y')),' ',MONTHNAME(STR_TO_DATE(CMPLNT_FR_DT, '%m/%d/%Y'))) period, count(1) count from NYPD_COMPLAINTS
+#where YEAR(STR_TO_DATE(CMPLNT_FR_DT, '%m/%d/%Y'))>2005
+#group by concat(YEAR(STR_TO_DATE(CMPLNT_FR_DT, '%m/%d/%Y')),' ',MONTHNAME(STR_TO_DATE(CMPLNT_FR_DT, '%m/%d/%Y')))
+#order by YEAR(STR_TO_DATE(CMPLNT_FR_DT, '%m/%d/%Y')),MONTH(STR_TO_DATE(CMPLNT_FR_DT, '%m/%d/%Y'))
+
+
+
+
+year_month_wise_data <- read.csv("C:/Durvesh/Sem 2/BDAMS/Year_wise_month_wise_count.csv")  
+  
+plot(year_month_wise_data$period,year_month_wise_data$count,type="l")
+plot(year_month_wise_data$count,type="l",xlab = "Period",ylab = "Incidences", col = "darkblue",   main = "Over The Period")
+
+ggplot(year_month_wise_data, aes(x=year_month_wise_data$period)) +
+  geom_line(aes(y=year_month_wise_data$count))  +
+  geom_line(aes(y=year_month_wise_data$count))  
+
+
+
+---------------------------
+---------------------------
+---------------------------
+  
+#select LAW_CAT_CD,YEAR(STR_TO_DATE(CMPLNT_FR_DT, '%m/%d/%Y')) year ,count(1) count from NYPD_COMPLAINTS
+#where YEAR(STR_TO_DATE(CMPLNT_FR_DT, '%m/%d/%Y'))>2005
+#group by LAW_CAT_CD,YEAR(STR_TO_DATE(CMPLNT_FR_DT, '%m/%d/%Y'))
+#order by LAW_CAT_CD,YEAR(STR_TO_DATE(CMPLNT_FR_DT, '%m/%d/%Y')) 
+
+  
+law_cat_year_wise_data <- read.csv("C:/Durvesh/Sem 2/BDAMS/Law_Cat_Year_Wise.csv")  
+
+felony_data=law_cat_year_wise_data[law_cat_year_wise_data$LAW_CAT_CD=='FELONY',]
+misdemeanor_data=law_cat_year_wise_data[law_cat_year_wise_data$LAW_CAT_CD=='MISDEMEANOR',]
+violation_data=law_cat_year_wise_data[law_cat_year_wise_data$LAW_CAT_CD=='VIOLATION',]
+
+ggplot(felony_data, aes(x=felony_data$year)) +
+  geom_line(aes(y=felony_data$count ,colour="Felony")) +
+  geom_line(aes(y=misdemeanor_data$count ,colour="Misdemeanor")) +
+  geom_line(aes(y=violation_data$count ,colour="Violation")) +
+  scale_colour_manual("", 
+                      breaks = c("Felony", "Misdemeanor", "Violation"),
+                      values = c("Felony"="green", "Misdemeanor"="red", "Violation"="blue")
+  ) +
+  xlab("Year")+
+  ylab("Incidences Count")+
+  scale_x_continuous(breaks=seq(2006,2015,by=2) , limits=c(2006,2015))
+
+---------------------------
+--------------------------
+---------------------------
+  
+
+
+#select LAW_CAT_CD,YEAR(STR_TO_DATE(CMPLNT_FR_DT, '%m/%d/%Y')) year ,count(1) count from NYPD_COMPLAINTS
+#where YEAR(STR_TO_DATE(CMPLNT_FR_DT, '%m/%d/%Y'))>2005
+#group by LAW_CAT_CD,YEAR(STR_TO_DATE(CMPLNT_FR_DT, '%m/%d/%Y'))
+#order by LAW_CAT_CD,YEAR(STR_TO_DATE(CMPLNT_FR_DT, '%m/%d/%Y')) 
+
+
+law_cat_year_wise_data <- read.csv("C:/Durvesh/Sem 2/BDAMS/Law_Cat_Year_Wise.csv")  
+
+felony_data=law_cat_year_wise_data[law_cat_year_wise_data$LAW_CAT_CD=='FELONY',]
+misdemeanor_data=law_cat_year_wise_data[law_cat_year_wise_data$LAW_CAT_CD=='MISDEMEANOR',]
+violation_data=law_cat_year_wise_data[law_cat_year_wise_data$LAW_CAT_CD=='VIOLATION',]
+
+ggplot(felony_data, aes(x=felony_data$year)) +
+  geom_line(aes(y=felony_data$count ,colour="Felony")) +
+  geom_line(aes(y=misdemeanor_data$count ,colour="Misdemeanor")) +
+  geom_line(aes(y=violation_data$count ,colour="Violation")) +
+  scale_colour_manual("", 
+                      breaks = c("Felony", "Misdemeanor", "Violation"),
+                      values = c("Felony"="green", "Misdemeanor"="red", "Violation"="blue")
+  ) +
+  xlab("Year")+
+  ylab("Incidences Count")+
+  scale_x_continuous(breaks=seq(2006,2015,by=2) , limits=c(2006,2015))
+
+
+
+------------------------
+------------------------
+------------------------
+  
+#select YEAR(STR_TO_DATE(RPT_DT, '%m/%d/%Y')) year,count(1) count
+#from  NYPD_COMPLAINTS
+#group by YEAR(STR_TO_DATE(RPT_DT, '%m/%d/%Y'))
+  
+year_wise_data <- read.csv("C:/Durvesh/Sem 2/BDAMS/Year_wise_count.csv")  
+
+plot(year_wise_data$year, year_wise_data$count,type="l",xlab = "Year",ylab = "Incidences", col = "darkblue",   main = "Crime Reduction Over the Period")
+
+cor(year_wise_data$year,year_wise_data$count)
+#-0.9703964
+
+
+
+------------------------
+------------------------
+------------------------
+  
+#select ADDR_PCT_CD, count(1) count from NYPD_COMPLAINTS
+#where YEAR(STR_TO_DATE(RPT_DT, '%m/%d/%Y'))>2005
+#and ADDR_PCT_CD<>""
+#group by ADDR_PCT_CD
+#order by cast(ADDR_PCT_CD as Signed)
+  
+precinct_wise_data <- read.csv("C:/Durvesh/Sem 2/BDAMS/Precinct_Wise.csv")  
+
+------------------------
+------------------------
+------------------------
+  
+borough_data <- read.csv("C:/Durvesh/Sem 2/BDAMS/Borough_Detail.csv")  
+
+borough_new = merge(borough_data,borough_wise_data)
+
+cor(borough_new$size,borough_new$count)
+cor(borough_new$population,borough_new$count)
+cor(borough_new$density,borough_new$count)
+
+------------------------
+------------------------
+------------------------
+population_data <- read.csv("C:/Durvesh/Sem 2/BDAMS/Population_detail.csv")  
+
+census_crime = merge(year_wise_data,population_data)
+
+par(mar = c(5,5,2,5))
+
+with(census_crime,plot(year,population,type="l",col="red"))
+par(new = T)
+with(census_crime, plot(year,count,type="l",axes=F,ylab=NA))
+axis(side = 4)
+mtext(side = 4, line = 3, 'incidences')
+legend("top",
+       legend=c("Population", "Incidences"),
+       lty=c(1,0), pch=c(NA, 16), col=c("red", "black"))
+
+cor(census_crime$population,census_crime$count)
+#-0.8988565
+
+
+------------------------
+------------------------
+------------------------
+unemployment_data <- read.csv("C:/Durvesh/Sem 2/BDAMS/Unemployment_rate.csv") 
+
+unemployment_crime =merge(year_wise_data,unemployment_data) 
+
+cor(unemployment_crime$rate,census_crime$count)
+
+
+------------------------
+------------------------
+------------------------
+#select BORO_NM,law_cat_cd,count(1) count from nypd_complaints
+#where BORO_NM<>''
+#and law_cat_cd<>''
+#group by BORO_NM,law_cat_cd
+  
+boroughwise_lawcat_wise_data <- read.csv("C:/Durvesh/Sem 2/BDAMS/Borough_wise_Law_cat_Count.csv")
+
+barchart(count~law_cat_cd,data=boroughwise_lawcat_wise_data,groups=BORO_NM, 
+         scales=list(x=list(rot=90,cex=0.8)), auto.key=T)
+-------------------------
+-------------------------
+-------------------------
+monthwise_completion_rate_data <- read.csv("C:/Durvesh/Sem 2/BDAMS/Time_required_To_commit_crime.csv")
+
+plot(monthwise_completion_rate_data)
+
+lines(monthwise_completion_rate_data$count)
+---------------------
+---------------------
+-------------------------------
+#SELECT BORO_NM,CRM_ATPT_CPTD_CD,count(1) count from NYPD_COMPLAINTS
+#WHERE BORO_NM<>''
+#and CRM_ATPT_CPTD_CD<>''
+#GROUP BY BORO_NM,CRM_ATPT_CPTD_CD
+#ORDER BY BORO_NM,CRM_ATPT_CPTD_CD
+  
+boroughwise_completion_rate_data <- read.csv("C:/Durvesh/Sem 2/BDAMS/Borough_wise_Completion_rate_Count.csv")
+
+barchart(count~BORO_NM,data=boroughwise_completion_rate_data,groups=CRM_ATPT_CPTD_CD,
+         scales=list(x=list(rot=90,cex=0.8)), auto.key=T)
+---------------------
+---------------------
+---------------------
+#SELECT YEAR(STR_TO_DATE(CMPLNT_FR_DT, '%m/%d/%Y')) year,CRM_ATPT_CPTD_CD is_completed,count(1) count from NYPD_COMPLAINTS
+#WHERE YEAR(STR_TO_DATE(CMPLNT_FR_DT, '%m/%d/%Y'))> 2005
+#and CRM_ATPT_CPTD_CD<>''
+#GROUP BY YEAR(STR_TO_DATE(CMPLNT_FR_DT, '%m/%d/%Y')),CRM_ATPT_CPTD_CD
+#ORDER BY YEAR(STR_TO_DATE(CMPLNT_FR_DT, '%m/%d/%Y')),CRM_ATPT_CPTD_CD
+
+yearwise_completion_rate_data <- read.csv("C:/Durvesh/Sem 2/BDAMS/Year_wise_Completion_rate_Count.csv")
+
+barchart(count~is_completed,data=yearwise_completion_rate_data,groups=year,scales=list(x=list(rot=90,cex=0.8)),auto.key=T)
+---------------------
+---------------------
+---------------------
+#select BORO_NM,HOUR(CMPLNT_FR_TM) hour,count(1) count from nypd_complaints
+#WHERE YEAR(STR_TO_DATE(CMPLNT_FR_DT, '%m/%d/%Y')) >2005
+#and BORO_NM<>''
+#and CMPLNT_FR_TM<>''
+#group by BORO_NM,HOUR(CMPLNT_FR_TM)
+#order by BORO_NM,HOUR(CMPLNT_FR_TM)
+  
+borough_hour_data <- read.csv("C:/Durvesh/Sem 2/BDAMS/Borough_wise_Hour_wise_Count.csv")
+
+brooklyn_data=borough_hour_data[borough_hour_data$BORO_NM=='BROOKLYN',]
+queens_data=borough_hour_data[borough_hour_data$BORO_NM=='QUEENS',]
+bronx_data=borough_hour_data[borough_hour_data$BORO_NM=='BRONX',]
+manhattan_data=borough_hour_data[borough_hour_data$BORO_NM=='MANHATTAN',]
+staten_island_data=borough_hour_data[borough_hour_data$BORO_NM=='STATEN ISLAND',]
+
+
+
+ggplot(brooklyn_data, aes(x=brooklyn_data$hour)) +
+  geom_line(aes(y=bronx_data$count ,colour="Bronx")) +
+  geom_line(aes(y=brooklyn_data$count ,colour="Brooklyn")) +
+  geom_line(aes(y=manhattan_data$count ,colour="Manhattan")) +
+  geom_line(aes(y=queens_data$count ,colour="Queens")) +
+  geom_line(aes(y=staten_island_data$count ,colour="Staten_Island"))+
+  xlab("Hour")+
+  ylab("Incidences Count")+
+  scale_x_continuous(breaks=seq(0,23,by=2) , limits=c(0,23)) 
+
+#select law_cat_cd,HOUR(CMPLNT_FR_TM) hour,count(1) count from nypd_complaints
+#WHERE YEAR(STR_TO_DATE(CMPLNT_FR_DT, '%m/%d/%Y')) >2005
+#and law_cat_cd<>''
+#and CMPLNT_FR_TM<>''
+#group by law_cat_cd,HOUR(CMPLNT_FR_TM)
+#order by law_cat_cd,HOUR(CMPLNT_FR_TM)
+
+law_cat_hour_data <- read.csv("C:/Durvesh/Sem 2/BDAMS/Law_Category_wise_Hour_wise_Count.csv")
+
+felony_data=law_cat_hour_data[law_cat_hour_data$law_cat_cd=='FELONY',]
+misdemeanor_data=law_cat_hour_data[law_cat_hour_data$law_cat_cd=='MISDEMEANOR',]
+violation_data=law_cat_hour_data[law_cat_hour_data$law_cat_cd=='VIOLATION',]
+
+ggplot(felony_data, aes(x=felony_data$hour)) +
+  geom_line(aes(y=felony_data$count ,colour="Felony")) +
+  geom_line(aes(y=misdemeanor_data$count ,colour="Misdemeanor")) +
+  geom_line(aes(y=violation_data$count ,colour="Violation")) +
+  xlab("Hour")+
+  ylab("Incidences Count")
