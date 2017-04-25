@@ -7,7 +7,7 @@ Login using credentials.
 
 Login to dumbo.
 
---------------------------------------one time operation
+---------------------------------------
 
 wget https://data.cityofnewyork.us/api/views/qgea-i56i/rows.csv?accessType=DOWNLOAD
 
