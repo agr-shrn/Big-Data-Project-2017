@@ -7,7 +7,7 @@ Login using credentials.
 
 Login to dumbo.
 
---one time operation
+--------------------------------------one time operation
 
 wget https://data.cityofnewyork.us/api/views/qgea-i56i/rows.csv?accessType=DOWNLOAD
 
@@ -15,8 +15,7 @@ mv downloaded_filename.csv NYPD.csv
 
 hadoop fs -copyFromLocal NYPD.csv
 
---
---------------------------------------
+----------------------------------------
 
 #if metastore_db folder exists 
 
