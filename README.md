@@ -40,4 +40,5 @@ pyspark2
 
 Type ctrl+d(exit pyspark)
 
+#get all files from hadoop to working directory like this.
 hadoop fs -getmerge Borough_wise_Count.csv Borough_wise_Count.csv
