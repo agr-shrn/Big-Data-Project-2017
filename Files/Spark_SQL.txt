@@ -26,3 +26,78 @@ order by STR_TO_DATE(CMPLNT_FR_DT, '%m/%d/%Y')")
 df.write.csv('DateWise.csv')
 
 ----------------------------------
+
+df=spark.sql("select concat(YEAR(STR_TO_DATE(CMPLNT_FR_DT, '%m/%d/%Y')),' ',MONTHNAME(STR_TO_DATE(CMPLNT_FR_DT, '%m/%d/%Y'))) period, count(1) count from NYPD_COMPLAINTS
+where YEAR(STR_TO_DATE(CMPLNT_FR_DT, '%m/%d/%Y'))>2005
+group by concat(YEAR(STR_TO_DATE(CMPLNT_FR_DT, '%m/%d/%Y')),' ',MONTHNAME(STR_TO_DATE(CMPLNT_FR_DT, '%m/%d/%Y')))
+order by YEAR(STR_TO_DATE(CMPLNT_FR_DT, '%m/%d/%Y')),MONTH(STR_TO_DATE(CMPLNT_FR_DT, '%m/%d/%Y'))")
+
+df.write.csv('Year_wise_month_wise_count.csv')
+
+----------------------------------
+
+df=spark.sql("select LAW_CAT_CD,YEAR(STR_TO_DATE(CMPLNT_FR_DT, '%m/%d/%Y')) year ,count(1) count from NYPD_COMPLAINTS
+where YEAR(STR_TO_DATE(CMPLNT_FR_DT, '%m/%d/%Y'))>2005
+group by LAW_CAT_CD,YEAR(STR_TO_DATE(CMPLNT_FR_DT, '%m/%d/%Y'))
+order by LAW_CAT_CD,YEAR(STR_TO_DATE(CMPLNT_FR_DT, '%m/%d/%Y'))")
+
+df.write.csv('Law_Cat_Year_Wise.csv')
+
+----------------------------------
+
+df=spark.sql("select YEAR(STR_TO_DATE(RPT_DT, '%m/%d/%Y')) year,count(1) count
+from  NYPD_COMPLAINTS
+group by YEAR(STR_TO_DATE(RPT_DT, '%m/%d/%Y'))")
+
+df.write.csv('Year_wise_count.csv')
+
+----------------------------------
+
+df=spark.sql("select BORO_NM,law_cat_cd,count(1) count from nypd_complaints
+where BORO_NM<>''
+and law_cat_cd<>''
+group by BORO_NM,law_cat_cd")
+
+df.write.csv('Borough_wise_Law_cat_Count.csv')
+
+----------------------------------
+
+df=spark.sql("SELECT BORO_NM,CRM_ATPT_CPTD_CD,count(1) count from NYPD_COMPLAINTS
+WHERE BORO_NM<>''
+and CRM_ATPT_CPTD_CD<>''
+GROUP BY BORO_NM,CRM_ATPT_CPTD_CD
+ORDER BY BORO_NM,CRM_ATPT_CPTD_CD")
+
+df.write.csv('Borough_wise_Completion_rate_Count.csv')
+
+----------------------------------
+
+df=spark.sql("SELECT YEAR(STR_TO_DATE(CMPLNT_FR_DT, '%m/%d/%Y')) year,CRM_ATPT_CPTD_CD is_completed,count(1) count from NYPD_COMPLAINTS
+WHERE YEAR(STR_TO_DATE(CMPLNT_FR_DT, '%m/%d/%Y'))> 2005
+and CRM_ATPT_CPTD_CD<>''
+GROUP BY YEAR(STR_TO_DATE(CMPLNT_FR_DT, '%m/%d/%Y')),CRM_ATPT_CPTD_CD
+ORDER BY YEAR(STR_TO_DATE(CMPLNT_FR_DT, '%m/%d/%Y')),CRM_ATPT_CPTD_CD")
+
+df.write.csv('Year_wise_Completion_rate_Count.csv')
+
+----------------------------------
+
+df=spark.sql("select BORO_NM,HOUR(CMPLNT_FR_TM) hour,count(1) count from nypd_complaints
+WHERE YEAR(STR_TO_DATE(CMPLNT_FR_DT, '%m/%d/%Y')) >2005
+and BORO_NM<>''
+and CMPLNT_FR_TM<>''
+group by BORO_NM,HOUR(CMPLNT_FR_TM)
+order by BORO_NM,HOUR(CMPLNT_FR_TM)")
+
+df.write.csv('Borough_wise_Hour_wise_Count.csv')
+
+----------------------------------
+
+df=spark.sql("select law_cat_cd,HOUR(CMPLNT_FR_TM) hour,count(1) count from nypd_complaints
+WHERE YEAR(STR_TO_DATE(CMPLNT_FR_DT, '%m/%d/%Y')) >2005
+and law_cat_cd<>''
+and CMPLNT_FR_TM<>''
+group by law_cat_cd,HOUR(CMPLNT_FR_TM)
+order by law_cat_cd,HOUR(CMPLNT_FR_TM)")
+
+df.write.csv('Law_Category_wise_Hour_wise_Count.csv')
