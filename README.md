@@ -30,17 +30,11 @@ export PYTHONHASHSEED=0
 export SPARK_YARN_USER_ENV=PYTHONHASHSEED=0
 
 pyspark2
+
+
 ----------------------------------------
 
-import csv csvfile = sc.textFile('NYPD.csv') data = csvfile.mapPartitions(lambda x: csv.reader(x))
-
-schema_sd = spark.createDataFrame(data, ('CMPLNT_NUM' ,'CMPLNT_FR_DT' ,'CMPLNT_FR_TM' ,'CMPLNT_TO_DT' ,'CMPLNT_TO_TM' ,'RPT_DT' ,'KY_CD' ,'OFNS_DESC' ,'PD_CD' ,'PD_DESC' ,'CRM_ATPT_CPTD_CD' ,'LAW_CAT_CD' ,'JURIS_DESC' ,'BORO_NM' ,'ADDR_PCT_CD' ,'LOC_OF_OCCUR_DESC' ,'PREM_TYP_DESC' ,'PARKS_NM' ,'HADEVELOPT' ,'X_COORD_CD' ,'Y_COORD_CD' ,'Latitude' ,'Longitude' ,'Lat_Lon' ))
-
-schema_sd.createOrReplaceTempView("nypd_complaints")
-
------------------------------------------
-
-df =spark.sql("select BORO_NM,count(1) count from nypd_complaints where BORO_NM<>'' group by BORO_NM") df.write.csv('Borough_wise_Count.csv')
+#run the commands in SPARK_SQL.txt
 
 ------------------------------------------
 
