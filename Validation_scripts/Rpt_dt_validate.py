@@ -4,6 +4,7 @@ import sys
 from operator import add
 from pyspark import SparkContext
 from csv import reader 
+from datetime import datetime
 
 if __name__ == "__main__":
     
@@ -18,7 +19,7 @@ if __name__ == "__main__":
         
         try:
             
-            rep = datetime.datetime.strptime(str(x[5]), "%m/%d/%Y")
+            rep = datetime.strptime(str(x[5]), "%m/%d/%Y")
             
             if rep.year < 2006 or rep.year > 2016:
                 
@@ -38,8 +39,8 @@ if __name__ == "__main__":
     lines2 = lines.mapPartitions(lambda x: reader(x))
     
     lines_final = lines2.map(lambda x: new_map(x))
-    final = lines_final.map(lambda x: '%s\t%s' (x[0], x[1]))
+    final = lines_final.map(lambda x: '%s\t%s' % (x[0], x[1]))
     
-    counts.saveAsTextFile("Rpt_dt.out")
+    final.saveAsTextFile("Rpt_dt.out")
 
     sc.stop()

@@ -32,8 +32,8 @@ if __name__ == "__main__":
     lines2 = lines.mapPartitions(lambda x: reader(x))
     
     lines_final = lines2.map(lambda x: new_map(x))
-    final = lines_final.map(lambda x: '%s\t%s' (x[0], x[1]))
+    final = lines_final.map(lambda x: '%s\t%s' % (x[0], x[1]))
     
-    counts.saveAsTextFile("Key_CD.out")
+    final.saveAsTextFile("Key_CD.out")
 
     sc.stop()
