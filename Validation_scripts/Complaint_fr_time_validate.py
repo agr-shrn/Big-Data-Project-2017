@@ -4,6 +4,7 @@ import sys
 from operator import add
 from pyspark import SparkContext
 from csv import reader 
+from datetime import datetime
 
 if __name__ == "__main__":
     
@@ -18,12 +19,12 @@ if __name__ == "__main__":
         
         try:
             
-            datetime.datetime.strptime(str(x[2]), "%H:%M:%S")
+            datetime.strptime(str(x[2]), "%H:%M:%S")
             
             try:
 
-                ts_to = datetime.datetime.strptime(x[3]+"/"+x[4],"%m/%d/%Y/%H:%M:%S")
-                ts_for = datetime.datetime.strptime(x[1]+"/"+x[2],"%m/%d/%Y/%H:%M:%S")
+                ts_to = datetime.strptime(str([3])+"/"+str(x[4]),"%m/%d/%Y/%H:%M:%S")
+                ts_for = datetime.strptime(str(x[1])+"/"+str(x[2]),"%m/%d/%Y/%H:%M:%S")
 
                 if ts_for > ts_to:
                 
@@ -47,8 +48,8 @@ if __name__ == "__main__":
     lines2 = lines.mapPartitions(lambda x: reader(x))
     
     lines_final = lines2.map(lambda x: new_map(x))
-    final = lines_final.map(lambda x: '%s\t%s' (x[0], x[1]))
+    final = lines_final.map(lambda x: '%s\t%s' % (x[0], x[1]))
     
-    counts.saveAsTextFile("Complaint_fr_time.out")
+    final.saveAsTextFile("Complaint_fr_time.out")
 
     sc.stop()

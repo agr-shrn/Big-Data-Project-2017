@@ -17,13 +17,13 @@ if __name__ == "__main__":
     def new_map(x):
 
         if x[0] == "":
-            return(str(x[0]),"Integer, " + "Complaint Number, " + "NULL")
+            return(str(x[0]), "Integer, " + "Complaint Number, " + "NULL")
         
         try:
             value = int(x[0])
-            return(str(x[0]),"Integer, " + "Complaint Number," + "Valid")
+            return(str(x[0]), "Integer, " + "Complaint Number," + "Valid")
         except ValueError:
-            return(str(x[0]),"String, " + "Complaint Number, " + "Invalid")
+            return(str(x[0]), "String, " + "Complaint Number, " + "Invalid")
 
 
     sc = SparkContext()
@@ -32,8 +32,8 @@ if __name__ == "__main__":
     lines2 = lines.mapPartitions(lambda x: reader(x))
     
     lines_final = lines2.map(lambda x: new_map(x))
-    final = lines_final.map(lambda x: '%s\t%s' (x[0], x[1]))
+    final = lines_final.map(lambda x: '%s\t%s' % (x[0], x[1]))
     
-    counts.saveAsTextFile("Complaint_number.out")
+    final.saveAsTextFile("Complaint_number.out")
 
     sc.stop()
