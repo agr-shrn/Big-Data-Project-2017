@@ -1,0 +1,21 @@
+import csv csvfile = sc.textFile('NYPD.csv') 
+data = csvfile.mapPartitions(lambda x: csv.reader(x))
+
+schema_sd = spark.createDataFrame(data, ('CMPLNT_NUM' ,'CMPLNT_FR_DT' ,'CMPLNT_FR_TM' ,'CMPLNT_TO_DT' ,'CMPLNT_TO_TM' ,'RPT_DT' ,'KY_CD' ,'OFNS_DESC' ,'PD_CD' ,'PD_DESC' ,'CRM_ATPT_CPTD_CD' ,'LAW_CAT_CD' ,'JURIS_DESC' ,'BORO_NM' ,'ADDR_PCT_CD' ,'LOC_OF_OCCUR_DESC' ,'PREM_TYP_DESC' ,'PARKS_NM' ,'HADEVELOPT' ,'X_COORD_CD' ,'Y_COORD_CD' ,'Latitude' ,'Longitude' ,'Lat_Lon' ))
+
+schema_sd.createOrReplaceTempView("nypd_complaints")
+
+import csv csvfile = sc.textFile('Poverty_rate_Census.csv') 
+data1 = csvfile.mapPartitions(lambda x: csv.reader(x))
+
+schema_sd1 = spark.createDataFrame(data1, ('year' ,'rate'))
+
+schema_sd1.createOrReplaceTempView("poverty_rate")
+
+df =spark.sql("select b.year,incidences , rate from poverty_rate b join 
+(SELECT YEAR(STR_TO_DATE(RPT_DT, '%m/%d/%Y')) year,count(1) incidences from nypd_complaints
+where KY_CD in(106)
+group by year
+order by year) inc on inc.year=b.year")
+ 
+df.write.csv('Poverty_rate_Hypothesis.csv')
