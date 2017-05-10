@@ -1,0 +1,57 @@
+Correlation rpt_temp = 0.4288660587458129
+Correlation from_temp = 0.16216314105984736
+
+Correlation rpt_monthly_temp = 0.7149183823943651
+
+
+Correlation rpt_snow = -0.25833634422920737
+Correlation rpt_snowdepth = -0.280137954631687
+Correlation rpt_rain = -0.1666013500775618
+
+Corr rpt_rain_snow_depth = -0.3451866545335958
+
+Corr rpt_rain_snow_depth_monthly = -0.5912273789496527
+
+
+Fog: 	Without: 	1403.2159
+		With:		1383.7393
+
+# avg(Num_Crimes), HeavyFog
+1400.6936, 0
+1295.4552, 1
+
+
+# avg(Num_Crimes), rain/drizzle/mist
+1392.0526, 0
+1406.8449, 1
+
+# avg(Num_Crimes), drizzle
+1396.8913, 0
+1181.0000, 1
+
+# avg(Num_Crimes), rain only
+1394.8124, 0
+1402.2480, 1
+
+
+# avg(Num_Crimes), hail/pellets/snowIC
+1402.8686, 0
+1355.9638, 1
+
+# avg(Num_Crimes), pellets
+1397.0145, 0
+1230.5000, 1
+
+# avg(Num_Crimes), hail only
+1395.6081, 0
+1410.0744, 1
+
+# avg(Num_Crimes), Snow, snow pellets, snow grains, or ice crystals
+1403.9213, 0
+1250.7278, 1
+
+
+
+
+
+
